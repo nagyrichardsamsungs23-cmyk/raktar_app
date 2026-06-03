@@ -1,9 +1,18 @@
 import Database from 'better-sqlite3'
 import path from 'path'
+import fs from 'fs'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const DB_PATH = path.join(__dirname, '..', 'raktar.db')
+
+// DB_PATH környezeti változóból (Railway: /data/raktar.db), egyébként projekt mappa
+const DB_PATH = process.env.DB_PATH || path.join(__dirname, '..', 'raktar.db')
+
+// Ha a könyvtár nem létezik, hozzuk létre (pl. /data Railway-en)
+const dbDir = path.dirname(DB_PATH)
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true })
+}
 
 let db
 

@@ -7,3 +7,12 @@ startCommand = "node server/index.js"
 
 [service]
 port = 3000
+
+# Persistent volume az SQLite adatbázisnak (túlél minden újra-build-et!)
+[[service.volumes]]
+mountPath = "/data"
+name = "sqlite-data"
+
+# Környezeti változók
+[service.variables]
+DB_PATH = "/data/raktar.db"
