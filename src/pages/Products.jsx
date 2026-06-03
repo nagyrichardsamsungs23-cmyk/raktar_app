@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { api } from '../api'
+import BarcodeScanButton from '../components/BarcodeScanButton'
 
 const emptyProduct = {
   name: '', barcode: '', category_id: '', unit: 'db',
@@ -116,11 +117,16 @@ export default function Products() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Vonalkód *</label>
-                <input
-                  type="text" value={form.barcode}
-                  onChange={(e) => setForm({ ...form, barcode: e.target.value })}
-                  className="border rounded px-3 py-2 text-sm w-full" required
-                />
+                <div className="flex gap-2">
+                  <input
+                    type="text" value={form.barcode}
+                    onChange={(e) => setForm({ ...form, barcode: e.target.value })}
+                    className="border rounded px-3 py-2 text-sm flex-1" required
+                  />
+                  <BarcodeScanButton
+                    onScan={(code) => setForm({ ...form, barcode: code })}
+                  />
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Kategória</label>
