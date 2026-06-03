@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { api } from '../api'
 import BarcodeScanner from '../components/BarcodeScanner'
+import ProductSearch from '../components/ProductSearch'
 
 export default function StockOut() {
   const [product, setProduct] = useState(null)
@@ -10,6 +11,7 @@ export default function StockOut() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  // Vonalkódos keresés
   async function handleBarcodeScan(barcode) {
     setMessage('')
     setError('')
@@ -26,6 +28,14 @@ export default function StockOut() {
     } finally {
       setLoading(false)
     }
+  }
+
+  // Név alapú keresésből választás
+  function handleProductSelect(selectedProduct) {
+    setMessage('')
+    setError('')
+    setProduct(selectedProduct)
+    setQuantity('1')
   }
 
   async function handleStockOut(e) {
@@ -67,13 +77,29 @@ export default function StockOut() {
       <h2 className="text-xl font-bold text-gray-800 mb-4">Kivételezés</h2>
 
       <div className="max-w-lg">
-        {/* Vonalkód beolvasó komponens */}
+        {/* Keresési módok — csak ha nincs kiválasztott termék */}
         {!product && (
-          <BarcodeScanner
-            onScan={handleBarcodeScan}
-            loading={loading}
-            placeholder="Olvasd be vagy írd be a vonalkódot..."
-          />
+          <>
+            {/* Vonalkódos kereső */}
+            <BarcodeScanner
+              onScan={handleBarcodeScan}
+              loading={loading}
+              placeholder="Olvasd be vagy írd be a vonalkódot..."
+            />
+
+            {/* Elválasztó */}
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex-1 border-t border-gray-200" />
+              <span className="text-xs text-gray-400 font-medium">VAGY</span>
+              <div className="flex-1 border-t border-gray-200" />
+            </div>
+
+            {/* Terméknév kereső */}
+            <ProductSearch
+              onSelect={handleProductSelect}
+              loading={loading}
+            />
+          </>
         )}
 
         {loading && <p className="text-gray-500 text-sm mb-4">Keresés...</p>}
