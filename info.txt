@@ -1,0 +1,201 @@
+Készíts egy egyszerű raktárkezelő webalkalmazást kis családi vállalkozás számára.
+
+Nem vagyok programozó, ezért az app legyen egyszerűen futtatható, átlátható, magyar nyelvű és könnyen módosítható.
+
+Cél:
+Vonalkód alapján tudjak termékeket bevételezni és kivételezni. Látható legyen az aktuális készlet, a termékek kategóriák szerint rendezhetők legyenek, és a felület mobilon is jól működjön.
+
+Javasolt technológia:
+- React
+- Tailwind CSS
+- Node.js / Express backend
+- SQLite adatbázis
+- Ne használj bonyolult külső szolgáltatásokat az első verzióban
+
+Nyelv:
+Az egész alkalmazás magyar nyelvű legyen.
+
+Fő funkciók:
+
+1. Termékek kezelése
+Legyen terméklista, ahol új terméket tudok felvinni, szerkeszteni és törölni.
+
+Egy termék adatai:
+- termék neve
+- vonalkód
+- kategória
+- mértékegység, például db, méter, csomag
+- minimum készlet
+- aktuális készlet
+- megjegyzés
+
+2. Kategóriák kezelése
+Legyen külön kategórialista.
+
+Példa kategóriák:
+- Konnektorok
+- Klímák
+- Vezetékek
+- Kapcsolók
+- Csavarok
+- Szerszámok
+- Egyéb
+
+A termékeket lehessen kategória szerint szűrni.
+
+3. Vonalkódos keresés
+Legyen egy keresőmező, ahová be tudom olvasni a vonalkódot külső vonalkódolvasóval.
+
+Fontos:
+A külső vonalkódolvasó úgy működik, mint egy billentyűzet. A beolvasott kód bekerül a mezőbe, majd Enter után az app keresse meg a terméket.
+
+Legyen kézi vonalkód beírási lehetőség is.
+
+4. Bevételezés
+Legyen külön „Bevételezés” oldal.
+
+Működés:
+- beolvasom vagy beírom a vonalkódot
+- az app megkeresi a terméket
+- megadom a mennyiséget
+- rákattintok a „Bevételezés” gombra
+- az app növeli az aktuális készletet
+- az eseményt menti a készletmozgások közé
+
+5. Kivételezés
+Legyen külön „Kivételezés” oldal.
+
+Működés:
+- beolvasom vagy beírom a vonalkódot
+- az app megkeresi a terméket
+- megadom a mennyiséget
+- rákattintok a „Kivételezés” gombra
+- az app csökkenti az aktuális készletet
+- az eseményt menti a készletmozgások közé
+
+Ha a kivételezett mennyiség nagyobb, mint az aktuális készlet, az app ne engedje a műveletet, és írja ki:
+„Nincs elegendő készlet.”
+
+6. Készletmozgások naplózása
+Legyen egy „Mozgások” oldal, ahol látszik minden bevételezés és kivételezés.
+
+Egy mozgás adatai:
+- dátum és idő
+- termék neve
+- vonalkód
+- típus: bevételezés vagy kivételezés
+- mennyiség
+- megjegyzés
+
+7. Készlet oldal
+Legyen egy „Készlet” oldal.
+
+Itt táblázatban lássam:
+- termék neve
+- kategória
+- vonalkód
+- aktuális készlet
+- minimum készlet
+- státusz
+
+Státuszok:
+- „Rendben”, ha az aktuális készlet nagyobb, mint a minimum készlet
+- „Alacsony készlet”, ha az aktuális készlet kisebb vagy egyenlő a minimum készlettel
+- „Elfogyott”, ha az aktuális készlet 0
+
+8. Átlátható felület
+Legyen egyszerű menü:
+
+- Irányítópult
+- Készlet
+- Bevételezés
+- Kivételezés
+- Termékek
+- Kategóriák
+- Mozgások
+
+Az irányítópulton jelenjen meg:
+- összes termék száma
+- alacsony készletű termékek száma
+- elfogyott termékek száma
+- utolsó 5 készletmozgás
+
+9. Dizájn
+A felület legyen letisztult, világos, mobilbarát.
+
+Színek:
+- fehér háttér
+- sötétszürke szöveg
+- kék vagy zöld fő gombok
+- piros figyelmeztetés az elfogyott termékeknél
+- narancssárga jelzés az alacsony készletnél
+
+10. Adatbázis
+Hozz létre SQLite adatbázist ezekkel a táblákkal:
+
+categories:
+- id
+- name
+
+products:
+- id
+- name
+- barcode
+- category_id
+- unit
+- minimum_stock
+- current_stock
+- note
+- created_at
+
+stock_movements:
+- id
+- product_id
+- type
+- quantity
+- note
+- created_at
+
+11. Fontos működési szabályok
+- A vonalkód legyen egyedi.
+- A mennyiség nem lehet 0 vagy negatív.
+- Kivételezéskor ne lehessen negatív készlet.
+- Minden bevételezés és kivételezés kerüljön be a stock_movements táblába.
+- A termék törlése előtt kérjen megerősítést.
+- Hiba esetén magyar nyelvű hibaüzenetet jelenítsen meg.
+
+12. Tesztadatok
+Tegyél be néhány példa terméket:
+
+1. Schneider konnektor
+Vonalkód: 5991234567890
+Kategória: Konnektorok
+Egység: db
+Minimum készlet: 10
+Aktuális készlet: 25
+
+2. Réz vezeték 3x1,5
+Vonalkód: 5999876543210
+Kategória: Vezetékek
+Egység: méter
+Minimum készlet: 50
+Aktuális készlet: 120
+
+3. Klíma beltéri egység
+Vonalkód: 5991111222233
+Kategória: Klímák
+Egység: db
+Minimum készlet: 2
+Aktuális készlet: 5
+
+13. Kimenet
+Készítsd el a teljes működő projektet.
+Add meg:
+- a fájlstruktúrát
+- a telepítési lépéseket
+- az indítási parancsot
+- hogyan lehet új terméket felvinni
+- hogyan lehet vonalkóddal bevételezni és kivételezni
+
+Ne készíts túl bonyolult rendszert.
+Először csak egy stabil, egyszerű MVP verziót készíts.
