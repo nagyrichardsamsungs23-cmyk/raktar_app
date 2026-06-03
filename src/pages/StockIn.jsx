@@ -1,24 +1,16 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { api } from '../api'
+import BarcodeScanner from '../components/BarcodeScanner'
 
 export default function StockIn() {
-  const [barcode, setBarcode] = useState('')
   const [product, setProduct] = useState(null)
   const [quantity, setQuantity] = useState('')
   const [note, setNote] = useState('')
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const inputRef = useRef(null)
 
-  useEffect(() => {
-    inputRef.current?.focus()
-  }, [])
-
-  async function handleBarcodeSubmit(e) {
-    e.preventDefault()
-    if (!barcode.trim()) return
-
+  async function handleBarcodeScan(barcode) {
     setMessage('')
     setError('')
     setProduct(null)
@@ -52,7 +44,6 @@ export default function StockIn() {
         note,
       })
       setMessage(`Sikeres bevételezés! Új készlet: ${result.new_stock} ${product.unit}`)
-      setBarcode('')
       setProduct(null)
       setQuantity('')
       setNote('')
@@ -60,18 +51,15 @@ export default function StockIn() {
       setError(err.message)
     } finally {
       setLoading(false)
-      inputRef.current?.focus()
     }
   }
 
   function reset() {
-    setBarcode('')
     setProduct(null)
     setQuantity('')
     setNote('')
     setError('')
     setMessage('')
-    inputRef.current?.focus()
   }
 
   return (
@@ -79,30 +67,14 @@ export default function StockIn() {
       <h2 className="text-xl font-bold text-gray-800 mb-4">Bevételezés</h2>
 
       <div className="max-w-lg">
-        {/* Vonalkód beolvasó */}
-        <form onSubmit={handleBarcodeSubmit} className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Vonalkód beolvasása vagy beírása
-          </label>
-          <div className="flex gap-2">
-            <input
-              ref={inputRef}
-              type="text"
-              value={barcode}
-              onChange={(e) => setBarcode(e.target.value)}
-              placeholder="Olvasd be vagy írd be a vonalkódot..."
-              className="barcode-input border rounded px-3 py-2 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              autoComplete="off"
-            />
-            <button
-              type="submit"
-              disabled={loading || !barcode.trim()}
-              className="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700 disabled:opacity-50"
-            >
-              Keresés
-            </button>
-          </div>
-        </form>
+        {/* Vonalkód beolvasó komponens */}
+        {!product && (
+          <BarcodeScanner
+            onScan={handleBarcodeScan}
+            loading={loading}
+            placeholder="Olvasd be vagy írd be a vonalkódot..."
+          />
+        )}
 
         {loading && <p className="text-gray-500 text-sm mb-4">Keresés...</p>}
 
